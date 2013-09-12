@@ -1,11 +1,20 @@
 ----------------------------------------------------------------------------------
 --
--- scenetemplate.lua
+-- sceneMenu.lua
+-- by Conor Gilmer
 --
 ----------------------------------------------------------------------------------
 
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
+
+
+--Create a constantly looping background sound...
+local bgSound = audio.loadStream("bgSound.mp3")
+audio.reserveChannels(1)   --Reserve its channel
+audio.play(bgSound, {channel=1, loops=-1}) --Start looping the sound.
+
+
 
 ----------------------------------------------------------------------------------
 -- 

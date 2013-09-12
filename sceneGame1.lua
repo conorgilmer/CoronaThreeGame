@@ -9,7 +9,7 @@ local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 
 local background
-
+local tapSound, tapChannel
 ----------------------------------------------------------------------------------
 -- 
 --	NOTE:
@@ -24,6 +24,7 @@ local background
 ---------------------------------------------------------------------------------
 
 function  mainmenu(event)
+  tapChannel = audio.play( tapSound )
 	if event.phase == "ended" then
 	storyboard.gotoScene("sceneMenu")
     end
@@ -31,7 +32,7 @@ end
 
 function  moveLeft(event)
 	print 'Move Left'
-	
+	tapChannel = audio.play( tapSound )
 
 	halfBoxHeight = 48/2
 	leftBound = 48
@@ -42,7 +43,7 @@ end
 
 function  moveRight(event)
 	print 'Move rightbtn'
-
+tapChannel = audio.play( tapSound )
 	halfBoxHeight = 48/2
 	rightBound = display.contentWidth - 48
 	if junkbox.x <= rightBound then
@@ -52,6 +53,7 @@ end
 
 function  moveUp(event)
 	print 'Move up'
+  tapChannel = audio.play( tapSound )
 	halfBoxHeight = 48/2
 	if junkbox.y >= 48 then
 		junkbox.y = junkbox.y -25
@@ -60,6 +62,7 @@ end
 
 function  moveDown(event)
 	print 'Move Down'
+  tapChannel = audio.play( tapSound )
 	halfBoxHeight = 48/2
 	bottomBound = display.contentHeight - 148
 	if junkbox.y <= bottomBound then
@@ -73,8 +76,11 @@ local function moveJunk(event)
     halfPlayerWidth = 48 /2
 	-- Only move to the screen boundaries
 	if event.x >= halfPlayerWidth and event.x <= display.contentWidth - halfPlayerWidth then
+		if event.y >= halfPlayerWidth and event.y <= display.contentHeight - halfPlayerWidth then
 		-- Update player x axis
 		junkbox.x = event.x
+		junkbox.y = event.y
+	end
 	end
 end
 
@@ -89,6 +95,13 @@ function scene:createScene( event )
 	
 	-----------------------------------------------------------------------------
 	
+  -- Tap key Sound
+  
+	--Load the sounds.
+	tapSound = audio.loadSound("kbtap.mp3")
+
+  
+  
 	-- Blue background
 	background = display.newRect(0, 0, display.contentWidth, display.contentHeight)
 	background:setFillColor(21, 115, 193)
@@ -172,7 +185,10 @@ function scene:destroyScene( event )
 	--	INSERT code here (e.g. remove listeners, widgets, save state, etc.)
 	
 	-----------------------------------------------------------------------------
-	
+	-- Remove Sound
+  audio.dispose( tapSound ); tapSound = nil;
+  
+  
 end
 
 
