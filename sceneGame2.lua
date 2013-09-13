@@ -16,6 +16,9 @@ local scene = storyboard.newScene()
 
 local background
 
+local splatSound
+local splatChannel = 2
+
 --events
 local gameLoop, onCollision
 --local event
@@ -81,6 +84,8 @@ function scene:createScene( event )
 	
 	-----------------------------------------------------------------------------
 	
+	splatSound = audio.loadSound("comedy_trumpet.mp3") 
+
 	-- Blue background
 	background = display.newRect(0, 0, display.contentWidth, display.contentHeight)
 	background:setFillColor(21, 415, 193)
@@ -189,6 +194,7 @@ function createSplat(walker)
 	--splash.rotation = math.random(-90,90)
 	--splash.alpha = splashInitAlpha
 	group:insert(splat)
+	splatChannel = audio.play(splatSound)
 	
 	--transition.to(splash, {time = splashFadeTime, alpha = 0,  y = splash.y + splashSlideDistance, delay = splashFadeDelayTime, onComplete = function(event) splash:removeSelf() end})		
 	
@@ -314,6 +320,9 @@ function scene:destroyScene( event )
 	Runtime:removeEventListener( "touch", platform3 )
 	Runtime:removeEventListener("enterFrame", gameLoop)
 	Runtime:removeEventListener( "collision", onCollision )
+
+	audio.dispost(splatSound)
+	splatSound=nil
 
 end
 
