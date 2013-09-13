@@ -18,6 +18,7 @@ local background
 
 --events
 local gameLoop, onCollision
+--local event
 
 --Enemy
 local options = 
@@ -29,6 +30,7 @@ local options =
 }
 local enemySheet = graphics.newImageSheet( "sprite5.png", options)
 local enemySprite = { name="run", start=1, count=2, time = 300, loopCount = 0 } 
+
 
 ----------------------------------------------------------------------------------
 -- 
@@ -46,8 +48,13 @@ local enemySprite = { name="run", start=1, count=2, time = 300, loopCount = 0 }
 function tapRemove(event)
 	local name = event.target
     print ("removing obj")
-    display.remove(name)
+--if (eventa.phase =="begin") then
+--	timer.performWithDelay(1, function() self.removeSelf() end)
+--end
+
+   display.remove(name)
    -- event.target = nil
+
 end
 
 function  mainmenu(event)
@@ -64,8 +71,8 @@ function scene:createScene( event )
 	local group = self.view
 
 	-- create the group
-	enemyGroup = display.newGroup();
-	group:insert(enemyGroup)
+	--enemyGroup = display.newGroup();
+	--group:insert(enemyGroup)
 
 	-----------------------------------------------------------------------------
 		
@@ -96,7 +103,7 @@ function scene:createScene( event )
 
     -- add sun
 	sun1 = display.newImage("sun.png")
-	sun1.x = platform1.x +100
+	sun1.x = platform1.x
 	sun1.y = platform1.y  -100
 	sun1.name="sun1"
 	physics.addBody(sun1, "dynamic", {bounce=0})
@@ -106,16 +113,34 @@ function scene:createScene( event )
     platform2 = display.newImage("platform.png")
     platform2.y = display.contentHeight - 500
     platform2.x = display.contentWidth - 400
-    physics.addBody(platform2, "static", {bounce= 0})
+    physics.addBody(platform2, "static", {bounce= 0})    
     group:insert(platform2)
+
+    -- add sun 2
+	sun2 = display.newImage("sun.png")
+	sun2.x = platform2.x 
+	sun2.y = platform2.y  -100
+	sun2.name="sun1"
+	physics.addBody(sun2, "dynamic", {bounce=0})
+	group:insert(sun2)
+
 
     -- Add Platform3
     platform3 = display.newImage("platform.png")
     platform3.y = display.contentHeight - 650
     platform3.x = display.contentWidth - 200
     physics.addBody(platform3, "static", {bounce= 0})
-
     group:insert(platform3)
+
+
+     -- add sun 3
+	sun3 = display.newImage("sun.png")
+	sun3.x = platform3.x 
+	sun3.y = platform3.y  -100
+	sun3.name="sun1"
+	physics.addBody(sun3, "dynamic", {bounce=0})
+	group:insert(sun3)
+
 
     --print "add walker"
     -- add walker from left to right
@@ -136,6 +161,14 @@ function scene:createScene( event )
     mmimg.x = display.contentWidth - 160
 	mmimg.y = (display.contentHeight) - 50
 	group:insert(mmimg)
+
+
+
+mmimg:addEventListener("touch", mainmenu)
+	event.phase ="begin"
+	platform1:addEventListener("touch", function()platform1:removeSelf()end)--tapRemove)
+	platform2:addEventListener("touch", function()platform2:removeSelf()end)--tapRemove)
+	platform3:addEventListener("touch", function()platform3:removeSelf()end)--tapRemove)---------
 
 end
 
@@ -219,7 +252,6 @@ end
 
 		if gameIsActive == true then
 			local i
-
 			for i = 1,1,-1 do
 			--	print "in game loop i"
 			--	local enemy = enemyGroup[i]
@@ -244,12 +276,8 @@ end
 		
 	--	INSERT code here (e.g. start timers, load audio, start listeners, etc.)
 	
-	-----------------------------------------------------------------------------
-	mmimg:addEventListener("touch", mainmenu)
-	platform1:addEventListener("touch", tapRemove)
-	platform2:addEventListener("touch", tapRemove)
-	platform3:addEventListener("touch", tapRemove)
-end
+	--------------------------------------------------------------------
+	end
 
 
 -- Called when scene is about to move offscreen:
@@ -281,10 +309,12 @@ function scene:destroyScene( event )
 	--	INSERT code here (e.g. remove listeners, widgets, save state, etc.)
 	
 	-----------------------------------------------------------------------------
-	--Runtime:removeEventListener( "touch", platform1 )
-	--Runtime:removeEventListener( "touch", platform2 )
-	--Runtime:removeEventListener( "touch", platform3 )
-	--Runtime:removeEventListener("enterFrame", gameLoop)
+	Runtime:removeEventListener( "touch", platform1 )
+	Runtime:removeEventListener( "touch", platform2 )
+	Runtime:removeEventListener( "touch", platform3 )
+	Runtime:removeEventListener("enterFrame", gameLoop)
+	Runtime:removeEventListener( "collision", onCollision )
+
 end
 
 

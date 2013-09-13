@@ -34,18 +34,6 @@ function  mainmenu(event)
     end
 end
 
-local function moveSquare(event)
-	-- Doesn't respond if the game is ended
-	--if not gameIsActive then return false end
-    
-	-- Only move to the screen boundaries
-	if event.x >= 50 and event.x <= display.contentWidth - 50 then
-		-- Update player x axis
-		square.x = event.x
-		square.y = event.y
-
-	end
-end
 
 --Collision functon. Controls hitting the blocks and coins etc. Also resets the jumping, climbing a ladder and descending one - cg
 	function onCollision(event)
@@ -60,8 +48,8 @@ end
         if name1 == "circle" or name2=="circle" then
           	if name1=="circLine" or name2 =="circLine" then
            		print("GOTCHA Circle")
-           		display.remove(event.object2); event.object2 = nil
-                display.remove(event.object1); event.object1 = nil
+           		--display.remove(event.object2); event.object2 = nil
+                --display.remove(event.object1); event.object1 = nil
                 --  laserChannel = audio.play(gotchaSound)
                 --changeText(-5)
     		end  
@@ -69,8 +57,8 @@ end
         if name1 == "square" or name2=="square" then
           	if name1=="sqLine" or name2 =="sqLine" then
            		print("GOTCHA Square")
-           		display.remove(event.object2); event.object2 = nil
-                display.remove(event.object1); event.object1 = nil
+           		--display.remove(event.object2); event.object2 = nil
+                --display.remove(event.object1); event.object1 = nil
 
     		end  
        	end 
@@ -78,8 +66,8 @@ end
         if name1 == "diamond" or name2=="diamond" then
           	if name1=="dLine" or name2 =="dLine" then
            		print("GOTCHA Diamond")
-           		display.remove(event.object2); event.object2 = nil
-                display.remove(event.object1); event.object1 = nil
+           		--display.remove(event.object2); event.object2 = nil
+                --display.remove(event.object1); event.object1 = nil
 
     		end  
        	end 
@@ -88,7 +76,18 @@ end
                                                     
                   
 
+function snapShapes(shape, outLine) 
+        poutlinex = outLine.x +40
+		poutliney = outLine.y +40
+		if shape.x <= poutlinex and shape.y <=poutliney  then
+		 shape.x = outLine.x
+		 shape.y = outLine.y
+		 --physics.remove(circle)
+		 physics.addBody(shape, "static", {bounce=0})
+	
+		end
 
+end
 
 function moveCircle(event)
 	-- Doesn't respond if the game is ended
@@ -99,6 +98,28 @@ function moveCircle(event)
 		-- Update player x axis
 		circle.x = event.x
 		circle.y = event.y
+		pcirclelinex = circLine.x +40
+		pcircleliney = circLine.y +40
+		--if circle.x <= pcirclelinex and circle.y <=pcircleliney  then
+		-- circle.x = circLine.x
+		 --circle.y = circLine.y
+		 --physics.remove(circle)
+		--end
+		snapShapes(circle, circLine)
+	end
+end
+
+
+function moveSquare(event)
+	-- Doesn't respond if the game is ended
+	--if not gameIsActive then return false end
+    
+	-- Only move to the screen boundaries
+	if event.x >= 50 and event.x <= display.contentWidth - 50 then
+		-- Update player x axis
+		square.x = event.x
+		square.y = event.y
+		snapShapes(square,sqLine)
 
 	end
 end
@@ -112,6 +133,7 @@ function moveDiamond(event)
 		-- Update player x axis
 		diamond.x = event.x
 		diamond.y = event.y
+		snapShapes(diamond,dLine)
 
 	end
 end
@@ -162,7 +184,7 @@ function scene:createScene( event )
 	circle.x = 373;
 	circle.y = 678;
 	circle.name="circle"
-	physics.addBody(circle, "dynamic", {bounce=0.2})
+	--physics.addBody(circle, "dynamic", {bounce=0.2})
 	-- diamond outline
 	dLine = display.newImageRect("diamondL.png", 150, 150);
 	dLine.x = 600;
@@ -175,7 +197,7 @@ function scene:createScene( event )
 	diamond.x = 144;
 	diamond.y = 678;
 	diamond.name="diamond"
-	physics.addBody(diamond, "dynamic", {bounce=0.2})
+	--physics.addBody(diamond, "dynamic", {bounce=0.2})
 
     -- Add Floor
     local floor = display.newImage("floor.png")
@@ -234,6 +256,10 @@ function scene:exitScene( event )
 	-----------------------------------------------------------------------------
 	--Stop any loops/listeners from running
 	Runtime:removeEventListener( "collision", onCollision )
+	Runtime:removeEventListener("touch", moveSquare)
+Runtime:removeEventListener("touch", moveCircle)	
+	Runtime:removeEventListener("touch", moveDiamon0)
+
 
 	
 end
