@@ -16,8 +16,8 @@ local scene = storyboard.newScene()
 
 local background
 
-local splatSound
-local splatChannel = 2
+local splatSound, tuddSound
+local splatChannel, tuddChannel = 2, 4
 
 --events
 local gameLoop, onCollision
@@ -85,6 +85,7 @@ function scene:createScene( event )
 	-----------------------------------------------------------------------------
 	
 	splatSound = audio.loadSound("comedy_trumpet.mp3") 
+	tuddSound = audio.loadSound("Collect.mp3")
 
 	-- Blue background
 	background = display.newRect(0, 0, display.contentWidth, display.contentHeight)
@@ -173,7 +174,7 @@ mmimg:addEventListener("touch", mainmenu)
 	event.phase ="begin"
 	platform1:addEventListener("touch", function()platform1:removeSelf()end)--tapRemove)
 	platform2:addEventListener("touch", function()platform2:removeSelf()end)--tapRemove)
-	platform3:addEventListener("touch", function()platform3:removeSelf()end)--tapRemove)---------
+	platform3:addEventListener("touch", function()platform3:removeSelf()end)--tapRemove)
 
 end
 
@@ -219,11 +220,14 @@ end
             			print ("removing obj")
     					display.remove(event.object1)
     					event.object1 = nil
+    					tuddChannel = audio.play(tuddSound)
+
 
     				else 
     					print ("removing name 2 obj")
     					display.remove(event.object2)
     					event.object2= nil
+    					tuddChannel = audio.play(tuddSound)
             		end
             	end
             end
@@ -321,8 +325,10 @@ function scene:destroyScene( event )
 	Runtime:removeEventListener("enterFrame", gameLoop)
 	Runtime:removeEventListener( "collision", onCollision )
 
-	audio.dispost(splatSound)
+	audio.dispose(splatSound)
+	audio.dispose(tuddSound)
 	splatSound=nil
+	tuddSound=nil
 
 end
 

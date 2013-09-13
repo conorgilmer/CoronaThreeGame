@@ -15,6 +15,10 @@ physics.setGravity(0, 9.8)
 
 local background
 
+--setup audio sound and channel
+local snapSound
+local snapChannel = 2
+
 ----------------------------------------------------------------------------------
 -- 
 --	NOTE:
@@ -84,6 +88,7 @@ function snapShapes(shape, outLine)
 		 shape.y = outLine.y
 		 --physics.remove(circle)
 		 physics.addBody(shape, "static", {bounce=0})
+		 snapChannel = audio.play(snapSound)
 	
 		end
 
@@ -98,8 +103,8 @@ function moveCircle(event)
 		-- Update player x axis
 		circle.x = event.x
 		circle.y = event.y
-		pcirclelinex = circLine.x +40
-		pcircleliney = circLine.y +40
+		--pcirclelinex = circLine.x +40
+		--pcircleliney = circLine.y +40
 		--if circle.x <= pcirclelinex and circle.y <=pcircleliney  then
 		-- circle.x = circLine.x
 		 --circle.y = circLine.y
@@ -149,6 +154,9 @@ function scene:createScene( event )
 	
 	-----------------------------------------------------------------------------
 	
+	-- setup sound
+	snapSound = audio.loadSound("cash_register.mp3")
+
 	-- Blue background
 	background = display.newRect(0, 0, display.contentWidth, display.contentHeight)
 	background:setFillColor(211, 215, 193)
@@ -274,7 +282,7 @@ function scene:destroyScene( event )
 	--	INSERT code here (e.g. remove listeners, widgets, save state, etc.)
 	
 	-----------------------------------------------------------------------------
-	
+	audio.dispose(snapSound)
 end
 
 
