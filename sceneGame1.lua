@@ -46,7 +46,10 @@ function  moveRight(event)
 tapChannel = audio.play( tapSound )
 	halfBoxHeight = 48/2
 	rightBound = display.contentWidth - 48
+
 	if junkbox.x <= rightBound then
+		moveTimer = timer.performWithDelay(1, moveEverything, 0) --Timer for forcing movement
+
 		junkbox.x = junkbox.x +25
 	end
 end
