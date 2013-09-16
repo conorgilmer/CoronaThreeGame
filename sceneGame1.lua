@@ -9,7 +9,8 @@ local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 
 local background
-local tapSound, tapChannel
+local tapSound 
+local tapChannel=4
 ----------------------------------------------------------------------------------
 -- 
 --	NOTE:
@@ -19,7 +20,7 @@ local tapSound, tapChannel
 -- 
 ---------------------------------------------------------------------------------
 
----------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
 ---------------------------------------------------------------------------------
 
@@ -34,8 +35,8 @@ function  moveLeft(event)
 	print 'Move Left'
 	tapChannel = audio.play( tapSound )
 
-	halfBoxHeight = 48/2
-	leftBound = 48
+	halfBoxHeight = 96/2
+	leftBound = 96
 	if junkbox.x >= leftBound then
 		junkbox.x = junkbox.x -25
 	end
@@ -43,13 +44,11 @@ end
 
 function  moveRight(event)
 	print 'Move rightbtn'
-tapChannel = audio.play( tapSound )
-	halfBoxHeight = 48/2
-	rightBound = display.contentWidth - 48
+    tapChannel = audio.play( tapSound )
+	halfBoxHeight = 96/2
+	rightBound = display.contentWidth - 96
 
 	if junkbox.x <= rightBound then
-		moveTimer = timer.performWithDelay(1, moveEverything, 0) --Timer for forcing movement
-
 		junkbox.x = junkbox.x +25
 	end
 end
@@ -57,8 +56,8 @@ end
 function  moveUp(event)
 	print 'Move up'
   tapChannel = audio.play( tapSound )
-	halfBoxHeight = 48/2
-	if junkbox.y >= 48 then
+	halfBoxHeight = 96/2
+	if junkbox.y >= 120 then
 		junkbox.y = junkbox.y -25
 	end
 end
@@ -66,8 +65,8 @@ end
 function  moveDown(event)
 	print 'Move Down'
   tapChannel = audio.play( tapSound )
-	halfBoxHeight = 48/2
-	bottomBound = display.contentHeight - 148
+	halfBoxHeight = 96/2
+	bottomBound = display.contentHeight - 196
 	if junkbox.y <= bottomBound then
 		junkbox.y = junkbox.y +25
 	end
@@ -76,7 +75,7 @@ end
 local function moveJunk(event)
 	-- Doesn't respond if the game is ended
 	--if not gameIsActive then return false end
-    halfPlayerWidth = 48 /2
+    halfPlayerWidth = 96 
 	-- Only move to the screen boundaries
 	if event.x >= halfPlayerWidth and event.x <= display.contentWidth - halfPlayerWidth then
 		if event.y >= halfPlayerWidth and event.y <= display.contentHeight - halfPlayerWidth then
@@ -137,8 +136,8 @@ function scene:createScene( event )
 	downbtn.y = (display.contentHeight) - 70
 	group:insert(downbtn)
 
-	-- Junk Box
-    junkbox = display.newImageRect("junkbox.png", 48, 48)
+	-- Junk Box put in the middle
+    junkbox = display.newImageRect("junkbox96.png", 96, 96)
     junkbox.x = (display.contentWidth) /2
 	junkbox.y = (display.contentHeight) /2
 	group:insert(junkbox)
@@ -188,8 +187,9 @@ function scene:destroyScene( event )
 	--	INSERT code here (e.g. remove listeners, widgets, save state, etc.)
 	
 	-----------------------------------------------------------------------------
+	-- cleanup
 	-- Remove Sound
-  audio.dispose( tapSound ); tapSound = nil;
+    audio.dispose( tapSound ); tapSound = nil;
   
   
 end
