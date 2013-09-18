@@ -11,11 +11,13 @@ local physics = require("physics")
 -- start and set gravity
 physics.start()
 physics.setGravity(0, 9.8)
+
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 
 local background
 
+-- set up sounds
 local splatSound, tuddSound
 local splatChannel, tuddChannel = 2, 4
 
@@ -329,6 +331,7 @@ function scene:destroyScene( event )
 	audio.dispose(tuddSound)
 	splatSound=nil
 	tuddSound=nil
+
 
 end
 

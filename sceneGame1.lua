@@ -11,6 +11,7 @@ local scene = storyboard.newScene()
 local background
 local tapSound 
 local tapChannel=4
+local buttonPressed = false
 ----------------------------------------------------------------------------------
 -- 
 --	NOTE:
@@ -31,14 +32,25 @@ function  mainmenu(event)
     end
 end
 
+function buttonPressed(event)
+	if event.phase =="began" then
+		buttonPressed = true
+	elseif event.phase =="ended" then
+		buttonPressed = false
+	end
+	return true
+end
+
 function  moveLeft(event)
 	print 'Move Left'
 	tapChannel = audio.play( tapSound )
 
 	halfBoxHeight = 96/2
 	leftBound = 96
-	if junkbox.x >= leftBound then
-		junkbox.x = junkbox.x -25
+	if buttonPressed then
+		if junkbox.x >= leftBound then
+			junkbox.x = junkbox.x -25
+		end
 	end
 end
 
@@ -158,6 +170,7 @@ function scene:enterScene( event )
 	-----------------------------------------------------------------------------
 	mmimg:addEventListener("touch", mainmenu)
 	leftbtn:addEventListener("touch", moveLeft)
+	leftbtn:addEventListener("touch", buttonPressed)
 	rightbtn:addEventListener("touch", moveRight)
 	upbtn:addEventListener("touch", moveUp)
 	downbtn:addEventListener("touch", moveDown)
@@ -190,7 +203,7 @@ function scene:destroyScene( event )
 	-- cleanup
 	-- Remove Sound
     audio.dispose( tapSound ); tapSound = nil;
-  
+      
   
 end
 

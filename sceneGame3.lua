@@ -19,6 +19,9 @@ local background
 local snapSound
 local snapChannel = 2
 
+--debug variable
+local debugdisplay = true
+
 ----------------------------------------------------------------------------------
 -- 
 --	NOTE:
@@ -32,7 +35,7 @@ local snapChannel = 2
 -- BEGINNING OF YOUR IMPLEMENTATION
 ---------------------------------------------------------------------------------
 
-function  mainmenu(event)
+local function  mainmenu(event)
 	if event.phase == "ended" then
 	storyboard.gotoScene("sceneMenu")
     end
@@ -46,9 +49,9 @@ end
         local name1 = event.object1.name
         local name2 = event.object2.name
 
-        print ("incollisison")
-        print(name1)
-        print(name2)
+        --print ("incollisison")
+        --print(name1)
+        --print(name2)
         if name1 == "circle" or name2=="circle" then
           	if name1=="circLine" or name2 =="circLine" then
            		print("GOTCHA Circle")
@@ -78,20 +81,34 @@ end
 
 end
                                                     
-                  
+-- display to console if debugdisplay is true        
+function displayDebug(outPut)
+
+if debugdisplay == true then
+	print(outPut)
+end
+return true
+
+end          
 
 function snapShapes(shape, outLine) 
-        poutlinex = outLine.x +40
-		poutliney = outLine.y +40
+        local poutlinex = outLine.x +40
+		local poutliney = outLine.y +40
+
+		displayDebug(shape.name)
+		displayDebug(outLine.name)
+		displayDebug("("..poutlinex..","..poutliney..")")
+		displayDebug("("..shape.x..","..shape.y..")")
+
 		if shape.x <= poutlinex and shape.y <=poutliney  then
-		 shape.x = outLine.x
-		 shape.y = outLine.y
+			shape.x = outLine.x
+			shape.y = outLine.y
 		 --physics.remove(circle)
 		 --physics.addBody(shape, "static", {bounce=0})
-
-		physics.addBody(shape, "static", {density=0.004, friction=0.3, bounce=0, isSensor =true, gravity=0} )
-		shape.gravity=0
-		 snapChannel = audio.play(snapSound)
+		 	displayDebug("snapping "..shape.name.." to "..outLine.name)
+			physics.addBody(shape, "static", {density=0.004, friction=0.3, bounce=0, isSensor =true, gravity=0} )
+			shape.gravity=0
+			snapChannel = audio.play(snapSound)
 	
 		end
 
@@ -220,8 +237,8 @@ function scene:createScene( event )
 	physics.addBody(leftWall, "static", {bounce=0.1})
 	local rightWall = display.newRect(display.contentWidth, 0, 1, display.contentHeight)
 	physics.addBody(rightWall, "static", {bounce=0.1})	
-	--local ceiling = display.newRect(0, 0, display.contentWidth, 1)
-	--physics.addBody(ceiling, "static", {bounce=0.1})
+	local ceiling = display.newRect(0, 0, display.contentWidth, 1)
+	physics.addBody(ceiling, "static", {bounce=0.1})
 
     group:insert(floor)
 	group:insert(circle)
