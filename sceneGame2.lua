@@ -1,7 +1,10 @@
 ----------------------------------------------------------------------------------
 --
 -- sceneGame2.lua
--- by Conor Gilmer
+-- Game 2 has an enemy walking at the bottom and when you click on one of the 
+-- platforms and object falls if it hits the enemy it kills him
+--
+-- by Conor Gilmer (D12127567) conor.gilmer@gmail.com
 --
 ----------------------------------------------------------------------------------
 
@@ -59,16 +62,14 @@ function tapRemove(event)
 
    display.remove(name)
    -- event.target = nil
-
 end
 
+-- go to the main menu screen
 function  mainmenu(event)
 	if event.phase == "ended" then
 	storyboard.gotoScene("sceneMenu")
     end
 end
-
-
 
 
 -- Called when the scene's view does not exist:

@@ -1,7 +1,10 @@
 ----------------------------------------------------------------------------------
 --
 -- sceneGame1.lua
--- by Conor Gilmer
+-- Game one move an object left right up and down with the bondary of the screen 
+-- and not below the bottom where the buttons are
+--
+-- by Conor Gilmer (D12127567) conor.gilmer@gmail.com
 --
 ----------------------------------------------------------------------------------
 
@@ -35,6 +38,7 @@ end
 function buttonPressed(event)
 	if event.phase =="began" then
 		buttonPressed = true
+		--timer.performWithDelay(1,function () buttonPress(event) end, 0)
 	elseif event.phase =="ended" then
 		buttonPressed = false
 	end
@@ -153,10 +157,7 @@ function scene:createScene( event )
     junkbox.x = (display.contentWidth) /2
 	junkbox.y = (display.contentHeight) /2
 	group:insert(junkbox)
-
-
 end
-
 
 
 -- Called immediately after scene has moved onscreen:
@@ -203,8 +204,7 @@ function scene:destroyScene( event )
 	-- cleanup
 	-- Remove Sound
     audio.dispose( tapSound ); tapSound = nil;
-      
-  
+        
 end
 
 

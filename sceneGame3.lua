@@ -1,6 +1,9 @@
 ----------------------------------------------------------------------------------
 --
--- scenetemplate.lua
+-- sceneGame3.lua
+-- Game 3 is a jigsaw like game to match 3 shapes
+--
+-- by Conor Gilmer (D12127567) conor.gilmer@gmail.com
 --
 ----------------------------------------------------------------------------------
 
@@ -19,8 +22,14 @@ local background
 local snapSound
 local snapChannel = 2
 
---debug variable
+--note when objects matched
+local sMatch = false
+local cMatch = false
+local dMatch = false
+
+--debug variable for testing
 local debugdisplay = true
+
 
 ----------------------------------------------------------------------------------
 -- 
@@ -109,43 +118,42 @@ function snapShapes(shape, outLine)
 			physics.addBody(shape, "static", {density=0.004, friction=0.3, bounce=0, isSensor =true, gravity=0} )
 			shape.gravity=0
 			snapChannel = audio.play(snapSound)
+			if shape.name == "square" then
+				physics.addBody(circle, "static", {bounce=0})
+				sMatch = true
+			elseif shape.name == "circle" then
+				cMatch = true
+			elseif shape.name == "diamond" then
+				dMatch = true
+			else
+				dMatch = false
+				cMatch = false
+				sMatch = false
+			end
 	
 		end
-
 end
 
 function moveCircle(event)
-	-- Doesn't respond if the game is ended
-	--if not gameIsActive then return false end
-    
+
 	-- Only move to the screen boundaries
 	if event.x >= 50 and event.x <= display.contentWidth - 50 then
 		-- Update player x axis
 		circle.x = event.x
 		circle.y = event.y
-		--pcirclelinex = circLine.x +40
-		--pcircleliney = circLine.y +40
-		--if circle.x <= pcirclelinex and circle.y <=pcircleliney  then
-		-- circle.x = circLine.x
-		 --circle.y = circLine.y
-		 --physics.remove(circle)
-		--end
 		snapShapes(circle, circLine)
 	end
 end
 
 
 function moveSquare(event)
-	-- Doesn't respond if the game is ended
-	--if not gameIsActive then return false end
-    
+
 	-- Only move to the screen boundaries
 	if event.x >= 50 and event.x <= display.contentWidth - 50 then
-		-- Update player x axis
+		-- Update player x & y axis
 		square.x = event.x
 		square.y = event.y
 		snapShapes(square,sqLine)
-
 	end
 end
 
@@ -155,11 +163,10 @@ function moveDiamond(event)
     
 	-- Only move to the screen boundaries
 	if event.x >= 50 and event.x <= display.contentWidth - 50 then
-		-- Update player x axis
+		-- Update player x & y axis
 		diamond.x = event.x
 		diamond.y = event.y
 		snapShapes(diamond,dLine)
-
 	end
 end
 
@@ -200,13 +207,13 @@ function scene:createScene( event )
 	square.x = 600;
 	square.y = 678;
 	square.name = "square"
-	physics.addBody(square, "dynamic", {bounce=0.2})
+	--physics.addBody(square, "dynamic", {bounce=0.2})
 	-- Circle outline
 	circLine = display.newImageRect("circleline.png", 150, 150);
 	circLine.x = 181;
 	circLine.y = 180;
 	circLine.name="circLine"
-    physics.addBody(circLine, "static", {bounce=0})
+--    physics.addBody(circLine, "static", {bounce=0})
 	-- circle positioning
 	circle = display.newImageRect("circle.png", 150, 150);
 	circle.x = 373;
@@ -219,7 +226,7 @@ function scene:createScene( event )
 	dLine.y = 181;
 	dLine.name="dLine"
 
-    physics.addBody(dLine, "static", {bounce=0})
+  --  physics.addBody(dLine, "static", {bounce=0})
 	-- daimond
 	diamond = display.newImageRect("diamond.png", 150, 150);
 	diamond.x = 144;
@@ -237,6 +244,7 @@ function scene:createScene( event )
 	physics.addBody(leftWall, "static", {bounce=0.1})
 	local rightWall = display.newRect(display.contentWidth, 0, 1, display.contentHeight)
 	physics.addBody(rightWall, "static", {bounce=0.1})	
+	
 	local ceiling = display.newRect(0, 0, display.contentWidth, 1)
 	physics.addBody(ceiling, "static", {bounce=0.1})
 
