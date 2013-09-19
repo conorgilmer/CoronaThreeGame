@@ -14,7 +14,7 @@ local scene = storyboard.newScene()
 local background
 local tapSound 
 local tapChannel=4
-local buttonPressed = false
+--local buttonPressed = false
 ----------------------------------------------------------------------------------
 -- 
 --	NOTE:
@@ -35,15 +35,15 @@ function  mainmenu(event)
     end
 end
 
-function buttonPressed(event)
-	if event.phase =="began" then
-		buttonPressed = true
-		--timer.performWithDelay(1,function () buttonPress(event) end, 0)
-	elseif event.phase =="ended" then
-		buttonPressed = false
-	end
-	return true
-end
+--function buttonPressed(event)
+--	if event.phase =="began" then
+--		buttonPressed = true
+--		--timer.performWithDelay(1,function () buttonPress(event) end, 0)
+--	elseif event.phase =="ended" then
+--		buttonPressed = false
+--	end
+--	return true
+--end
 
 function  moveLeft(event)
 	print 'Move Left'
@@ -51,11 +51,11 @@ function  moveLeft(event)
 
 	halfBoxHeight = 96/2
 	leftBound = 96
-	if buttonPressed then
+--	if buttonPressed then
 		if junkbox.x >= leftBound then
 			junkbox.x = junkbox.x -25
 		end
-	end
+--	end
 end
 
 function  moveRight(event)
@@ -171,7 +171,7 @@ function scene:enterScene( event )
 	-----------------------------------------------------------------------------
 	mmimg:addEventListener("touch", mainmenu)
 	leftbtn:addEventListener("touch", moveLeft)
-	leftbtn:addEventListener("touch", buttonPressed)
+	--leftbtn:addEventListener("touch", buttonPressed)
 	rightbtn:addEventListener("touch", moveRight)
 	upbtn:addEventListener("touch", moveUp)
 	downbtn:addEventListener("touch", moveDown)
@@ -194,7 +194,7 @@ function scene:exitScene( event )
 	Runtime:removeEventListener("touch", moveDown)	
 	Runtime:removeEventListener("touch", moveRight)
 	Runtime:removeEventListener("touch", moveLeft)
-	Runtime:removeEventListener("touch", buttonPressed)
+	--Runtime:removeEventListener("touch", buttonPressed)
 
 	audio.stop(tapChannel)
 

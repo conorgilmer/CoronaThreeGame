@@ -296,7 +296,7 @@ function scene:exitScene( event )
 	Runtime:removeEventListener( "collision", onCollision )
 	Runtime:removeEventListener("enterFrame", gameLoop)
     audio.stop(splatChannel)
-
+    audio.stop(tuddChannel)
 end
 
 
