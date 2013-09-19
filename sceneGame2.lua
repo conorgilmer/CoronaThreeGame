@@ -179,7 +179,7 @@ function scene:enterScene( event )
 	local group = self.view
 	
 -- do i need this
---storyboard.removeAll()
+storyboard.removeAll()
 
 function createSplat(walker)
 	
