@@ -101,36 +101,46 @@ return true
 end          
 
 function snapShapes(shape, outLine) 
-        local poutlinex = outLine.x +40
-		local poutliney = outLine.y +40
+        local loutlinex = outLine.x -40
+		local loutliney = outLine.y -40
+		local houtlinex = outLine.x +40
+		local houtliney = outLine.y +40
 
-		displayDebug(shape.name)
+
+		displayDebug("moving"..shape.name)
 		displayDebug(outLine.name)
-		displayDebug("("..poutlinex..","..poutliney..")")
+		displayDebug("("..houtlinex..","..houtliney..")")
 		displayDebug("("..shape.x..","..shape.y..")")
 
-		if shape.x <= poutlinex and shape.y <=poutliney  then
+		if (shape.x <= houtlinex and shape.x > loutlinex) and (shape.y <= houtliney and shape.y > loutliney)  then
 			shape.x = outLine.x
 			shape.y = outLine.y
-		 --physics.remove(circle)
-		 --physics.addBody(shape, "static", {bounce=0})
 		 	displayDebug("snapping "..shape.name.." to "..outLine.name)
-			physics.addBody(shape, "static", {density=0.004, friction=0.3, bounce=0, isSensor =true, gravity=0} )
-			shape.gravity=0
+			--physics.addBody(shape, "static", {density=0.004, friction=0.3, bounce=0, isSensor =true, gravity=0} )
+			--shape.gravity=0
 			snapChannel = audio.play(snapSound)
+
 			if shape.name == "square" then
 				physics.addBody(circle, "static", {bounce=0})
 				sMatch = true
+				square.isHitTestable = false
+				square:removeEventListener("touch", moveSquare)
+
 			elseif shape.name == "circle" then
 				cMatch = true
+				circle.isHitTestable = false
+				circle:removeEventListener("touch", moveCircle)
+
 			elseif shape.name == "diamond" then
 				dMatch = true
+				diamond.isHitTestable = false
+				diamond:removeEventListener("touch", moveDiamond)
+
 			else
 				dMatch = false
 				cMatch = false
 				sMatch = false
-			end
-	
+			end	
 		end
 end
 
