@@ -101,84 +101,79 @@ return true
 end          
 
 function snapShapes(shape, outLine) 
-        local loutlinex = outLine.x -40
-		local loutliney = outLine.y -40
-		local houtlinex = outLine.x +40
-		local houtliney = outLine.y +40
+        local poutlinex = outLine.x +40
+		local poutliney = outLine.y +40
 
-		displayDebug("moving"..shape.name)
+		displayDebug(shape.name)
 		displayDebug(outLine.name)
-		displayDebug("("..houtlinex..","..houtliney..")")
+		displayDebug("("..poutlinex..","..poutliney..")")
 		displayDebug("("..shape.x..","..shape.y..")")
 
-		if (shape.x <= houtlinex and shape.x > loutlinex) and (shape.y <= houtliney and shape.y > loutliney)  then
+		if shape.x <= poutlinex and shape.y <=poutliney  then
 			shape.x = outLine.x
 			shape.y = outLine.y
+		 --physics.remove(circle)
+		 --physics.addBody(shape, "static", {bounce=0})
 		 	displayDebug("snapping "..shape.name.." to "..outLine.name)
-			--physics.addBody(shape, "static", {density=0.004, friction=0.3, bounce=0, isSensor =true, gravity=0} )
-			--shape.gravity=0
+			physics.addBody(shape, "static", {density=0.004, friction=0.3, bounce=0, isSensor =true, gravity=0} )
+			shape.gravity=0
 			snapChannel = audio.play(snapSound)
-
 			if shape.name == "square" then
 				physics.addBody(circle, "static", {bounce=0})
 				sMatch = true
-		--		square.isHitTestable = false
-				square:removeEventListener("touch", moveSquare)
-
 			elseif shape.name == "circle" then
 				cMatch = true
-		--		circle.isHitTestable = false
-				circle:removeEventListener("touch", moveCircle)
-
 			elseif shape.name == "diamond" then
 				dMatch = true
-		--		diamond.isHitTestable = false
-				diamond:removeEventListener("touch", moveDiamond)
-
 			else
 				dMatch = false
 				cMatch = false
 				sMatch = false
-			end	
+			end
+	
 		end
 end
 
--- Move Circle function
 function moveCircle(event)
+
 	-- Only move to the screen boundaries
-	if event.x >= 75 and event.x <= display.contentWidth - 75 then
-		if event.y>=75 and event.y <= display.contentHeight -150 then
+	if event.x >= 50 and event.x <= display.contentWidth - 50 then
 		-- Update player x axis
-			circle.x = event.x
-			circle.y = event.y
-			snapShapes(circle, circLine)
-		end	
+		circle.x = event.x
+		circle.y = event.y
+		--pcirclelinex = circLine.x +40
+		--pcircleliney = circLine.y +40
+		--if circle.x <= pcirclelinex and circle.y <=pcircleliney  then
+		-- circle.x = circLine.x
+		 --circle.y = circLine.y
+		 --physics.remove(circle)
+		--end
+		snapShapes(circle, circLine)
 	end
 end
 
--- Move Square function
+
 function moveSquare(event)
+
 	-- Only move to the screen boundaries
-	if event.x >= 75 and event.x <= display.contentWidth - 75 then
-		if event.y>=75 and event.y <= display.contentHeight -150 then
+	if event.x >= 50 and event.x <= display.contentWidth - 50 then
 		-- Update player x & y axis
-			square.x = event.x
-			square.y = event.y
-			snapShapes(square,sqLine)
-		end
+		square.x = event.x
+		square.y = event.y
+		snapShapes(square,sqLine)
 	end
 end
 
--- Move Diamond Function
 function moveDiamond(event)
+	-- Doesn't respond if the game is ended
+	--if not gameIsActive then return false end
+    
 	-- Only move to the screen boundaries
-	if event.x >= 75 and event.x <= display.contentWidth - 75 then
-		if event.y>=75 and event.y <= display.contentHeight -150 then
+	if event.x >= 50 and event.x <= display.contentWidth - 50 then
 		-- Update player x & y axis
-			diamond.x = event.x
-			diamond.y = event.y
-			snapShapes(diamond,dLine)
-		end
+		diamond.x = event.x
+		diamond.y = event.y
+		snapShapes(diamond,dLine)
 	end
 end
 
@@ -225,7 +220,7 @@ function scene:createScene( event )
 	circLine.x = 181;
 	circLine.y = 180;
 	circLine.name="circLine"
---    physics.addBody(circLine, "static", {bounce=0})
+    physics.addBody(circLine, "static", {bounce=0})
 	-- circle positioning
 	circle = display.newImageRect("circle.png", 150, 150);
 	circle.x = 373;
@@ -238,7 +233,7 @@ function scene:createScene( event )
 	dLine.y = 181;
 	dLine.name="dLine"
 
-  --  physics.addBody(dLine, "static", {bounce=0})
+    physics.addBody(dLine, "static", {bounce=0})
 	-- daimond
 	diamond = display.newImageRect("diamond.png", 150, 150);
 	diamond.x = 144;
@@ -287,26 +282,29 @@ function scene:enterScene( event )
 	circle:addEventListener("touch", moveCircle)
 	diamond:addEventListener("touch", moveDiamond)
 
---	Runtime:addEventListener("collision",onCollision)
+
+
+	Runtime:addEventListener("collision",onCollision)
 end
 
 
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
 	local group = self.view
-	print ("Exit Scene Game 3")
+	
 	-----------------------------------------------------------------------------
 	
 	--	INSERT code here (e.g. stop timers, remove listeners, unload sounds, etc.)
 	
 	-----------------------------------------------------------------------------
 	--Stop any loops/listeners from running
-	--Runtime:removeEventListener( "collision", onCollision )
-	Runtime:removeEventListener("touch", mainmenu)
+	Runtime:removeEventListener( "collision", onCollision )
 	Runtime:removeEventListener("touch", moveSquare)
-	Runtime:removeEventListener("touch", moveCircle)	
-	Runtime:removeEventListener("touch", moveDiamond) 
-	audio.stop(snapChannel)
+Runtime:removeEventListener("touch", moveCircle)	
+	Runtime:removeEventListener("touch", moveDiamon0)
+
+
+	
 end
 
 
