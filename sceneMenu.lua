@@ -10,10 +10,9 @@ local scene = storyboard.newScene()
 
 
 --Create a constantly looping background sound...
-local bgSound = audio.loadStream("bgSound.mp3")
-audio.reserveChannels(1)   --Reserve its channel
-audio.play(bgSound, {channel=1, loops=-1}) --Start looping the sound.
-
+--local bgSound = audio.loadStream("bgSound.mp3")
+--audio.reserveChannels(1)   --Reserve its channel
+--audio.play(bgSound, {channel=1, loops=-1}) --Start looping the sound.
 
 
 ----------------------------------------------------------------------------------
@@ -87,22 +86,17 @@ function scene:createScene( event )
     g3img.x = display.contentWidth/2
 	g3img.y = (display.contentHeight *4)/5
 	group:insert(g3img)
-
-
 end
-
 
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
-	local group = self.view
-	
+	local group = self.view	
 	-----------------------------------------------------------------------------
 		
 	--	INSERT code here (e.g. start timers, load audio, start listeners, etc.)
 	
 	-----------------------------------------------------------------------------
 	--message:setTextColor(250,0,0)
-
 	g1img:addEventListener("touch", game1)
 	g2img:addEventListener("touch", game2)
 	g3img:addEventListener("touch", game3)
@@ -118,7 +112,11 @@ function scene:exitScene( event )
 	--	INSERT code here (e.g. stop timers, remove listeners, unload sounds, etc.)
 	
 	-----------------------------------------------------------------------------
-	
+	--audio.stop(1)
+	--bgSound=nil
+	Runtime:removeEventListener("touch",game1)
+	Runtime:removeEventListener("touch",game2)
+	Runtime:removeEventListener("touch",game3)
 end
 
 
@@ -131,7 +129,7 @@ function scene:destroyScene( event )
 	--	INSERT code here (e.g. remove listeners, widgets, save state, etc.)
 	
 	-----------------------------------------------------------------------------
-	
+    audio.dispose(bgSound)
 end
 
 

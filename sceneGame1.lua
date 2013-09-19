@@ -188,7 +188,16 @@ function scene:exitScene( event )
 	--	INSERT code here (e.g. stop timers, remove listeners, unload sounds, etc.)
 	
 	-----------------------------------------------------------------------------
-	
+	Runtime:removeEventListener("touch", mainmenu)
+	Runtime:removeEventListener("touch", moveJunk)
+	Runtime:removeEventListener("touch", moveUp)		
+	Runtime:removeEventListener("touch", moveDown)	
+	Runtime:removeEventListener("touch", moveRight)
+	Runtime:removeEventListener("touch", moveLeft)
+	Runtime:removeEventListener("touch", buttonPressed)
+
+	audio.stop(tapChannel)
+
 end
 
 

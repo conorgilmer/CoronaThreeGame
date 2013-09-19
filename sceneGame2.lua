@@ -17,7 +17,6 @@ physics.setGravity(0, 9.8)
 
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
-
 local background
 
 -- set up sounds
@@ -39,7 +38,6 @@ local options =
 local enemySheet = graphics.newImageSheet( "sprite5.png", options)
 local enemySprite = { name="run", start=1, count=2, time = 300, loopCount = 0 } 
 
-
 ----------------------------------------------------------------------------------
 -- 
 --	NOTE:
@@ -55,10 +53,10 @@ local enemySprite = { name="run", start=1, count=2, time = 300, loopCount = 0 }
 
 function tapRemove(event)
 	local name = event.target
-    print ("removing obj")
+    --print ("removing obj")
 
    display.remove(name)
-   event.target = nil
+   --event.target = nil
 end
 
 -- go to the main menu screen
@@ -91,7 +89,6 @@ function scene:createScene( event )
 	background = display.newRect(0, 0, display.contentWidth, display.contentHeight)
 	background:setFillColor(21, 415, 193)
 	group:insert(background)
-
 
     -- Add Floor
     local floor = display.newImage("floor.png")
@@ -168,23 +165,20 @@ function scene:createScene( event )
 	mmimg.y = (display.contentHeight) - 50
 	group:insert(mmimg)
 
-
-
-mmimg:addEventListener("touch", mainmenu)
+	mmimg:addEventListener("touch", mainmenu)
 	event.phase ="begin"
-	platform1:addEventListener("touch", function()platform1:removeSelf()end)--tapRemove)
-	platform2:addEventListener("touch", function()platform2:removeSelf()end)--tapRemove)
-	platform3:addEventListener("touch", function()platform3:removeSelf()end)--tapRemove)
+	platform1:addEventListener("touch", function()platform1:removeSelf()end)
+	platform2:addEventListener("touch", function()platform2:removeSelf()end)
+	platform3:addEventListener("touch", function()platform3:removeSelf()end)
 
 end
-
 
 
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
 	local group = self.view
 	
-
+-- do i need this
 storyboard.removeAll()
 
 function createSplat(walker)
@@ -201,11 +195,9 @@ function createSplat(walker)
 	
 end
 
-
 	--Collision functon. Controls hitting the blocks and coins etc. Also resets the jumping, climbing a ladder and descending one - cg
 	function onCollision(event)
-            
-            
+                   
         if gameIsActive == true then
             local name1 = event.object1.name
             local name2 = event.object2.name
@@ -251,7 +243,6 @@ end
             	end
             end
         end
-
     end
     Runtime:addEventListener("collision",onCollision)
 	--------------------------------------------
@@ -267,10 +258,8 @@ end
 			--	local enemy = enemyGroup[i]
 				if enemy ~= nil and enemy.y ~= nil then
 					enemy:translate( enemy.speed, 0)
-
 					--Check to see if the enemy needs to change its direciton.
 					enemy.travelled = enemy.x; --enemy.travelled + enemy.speed
-
 					if enemy.travelled >= (display.contentWidth -10) or enemy.travelled <= 10 then
 						enemy.speed = -enemy.speed 
 						enemy.xScale = -enemy.xScale
@@ -302,10 +291,11 @@ function scene:exitScene( event )
 	Runtime:removeEventListener( "touch", platform1 )
 	Runtime:removeEventListener( "touch", platform2 )
 	Runtime:removeEventListener( "touch", platform3 )
-	Runtime:removeEventListener("enterFrame", gameLoop)
+	Runtime:removeEventListener("touch", mainmenu)
 	--Stop any loops/listeners from running
 	Runtime:removeEventListener( "collision", onCollision )
 	Runtime:removeEventListener("enterFrame", gameLoop)
+    audio.stop(splatChannel)
 
 end
 
@@ -319,11 +309,11 @@ function scene:destroyScene( event )
 	--	INSERT code here (e.g. remove listeners, widgets, save state, etc.)
 	
 	-----------------------------------------------------------------------------
-	Runtime:removeEventListener( "touch", platform1 )
-	Runtime:removeEventListener( "touch", platform2 )
-	Runtime:removeEventListener( "touch", platform3 )
-	Runtime:removeEventListener("enterFrame", gameLoop)
-	Runtime:removeEventListener( "collision", onCollision )
+	--Runtime:removeEventListener( "touch", platform1 )
+	--Runtime:removeEventListener( "touch", platform2 )
+	--Runtime:removeEventListener( "touch", platform3 )
+	--Runtime:removeEventListener("enterFrame", gameLoop)
+	--Runtime:removeEventListener( "collision", onCollision )
 
 	audio.dispose(splatSound)
 	audio.dispose(tuddSound)

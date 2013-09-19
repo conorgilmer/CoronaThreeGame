@@ -287,9 +287,7 @@ function scene:enterScene( event )
 	circle:addEventListener("touch", moveCircle)
 	diamond:addEventListener("touch", moveDiamond)
 
-
-
-	Runtime:addEventListener("collision",onCollision)
+--	Runtime:addEventListener("collision",onCollision)
 end
 
 
@@ -303,13 +301,14 @@ function scene:exitScene( event )
 	
 	-----------------------------------------------------------------------------
 	--Stop any loops/listeners from running
-	Runtime:removeEventListener( "collision", onCollision )
+	--Runtime:removeEventListener( "collision", onCollision )
+	Runtime:removeEventListener("touch", mainmenu)
 	Runtime:removeEventListener("touch", moveSquare)
-Runtime:removeEventListener("touch", moveCircle)	
-	Runtime:removeEventListener("touch", moveDiamon0)
+	Runtime:removeEventListener("touch", moveCircle)	
+	Runtime:removeEventListener("touch", moveDiamond) 
 
+	audio.stop(snapChannel)
 
-	
 end
 
 
