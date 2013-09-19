@@ -106,7 +106,6 @@ function snapShapes(shape, outLine)
 		local houtlinex = outLine.x +40
 		local houtliney = outLine.y +40
 
-
 		displayDebug("moving"..shape.name)
 		displayDebug(outLine.name)
 		displayDebug("("..houtlinex..","..houtliney..")")
@@ -123,17 +122,17 @@ function snapShapes(shape, outLine)
 			if shape.name == "square" then
 				physics.addBody(circle, "static", {bounce=0})
 				sMatch = true
-				square.isHitTestable = false
+		--		square.isHitTestable = false
 				square:removeEventListener("touch", moveSquare)
 
 			elseif shape.name == "circle" then
 				cMatch = true
-				circle.isHitTestable = false
+		--		circle.isHitTestable = false
 				circle:removeEventListener("touch", moveCircle)
 
 			elseif shape.name == "diamond" then
 				dMatch = true
-				diamond.isHitTestable = false
+		--		diamond.isHitTestable = false
 				diamond:removeEventListener("touch", moveDiamond)
 
 			else
@@ -144,39 +143,42 @@ function snapShapes(shape, outLine)
 		end
 end
 
+-- Move Circle function
 function moveCircle(event)
-
 	-- Only move to the screen boundaries
-	if event.x >= 50 and event.x <= display.contentWidth - 50 then
+	if event.x >= 75 and event.x <= display.contentWidth - 75 then
+		if event.y>=75 and event.y <= display.contentHeight -150 then
 		-- Update player x axis
-		circle.x = event.x
-		circle.y = event.y
-		snapShapes(circle, circLine)
+			circle.x = event.x
+			circle.y = event.y
+			snapShapes(circle, circLine)
+		end	
 	end
 end
 
-
+-- Move Square function
 function moveSquare(event)
-
 	-- Only move to the screen boundaries
-	if event.x >= 50 and event.x <= display.contentWidth - 50 then
+	if event.x >= 75 and event.x <= display.contentWidth - 75 then
+		if event.y>=75 and event.y <= display.contentHeight -150 then
 		-- Update player x & y axis
-		square.x = event.x
-		square.y = event.y
-		snapShapes(square,sqLine)
+			square.x = event.x
+			square.y = event.y
+			snapShapes(square,sqLine)
+		end
 	end
 end
 
+-- Move Diamond Function
 function moveDiamond(event)
-	-- Doesn't respond if the game is ended
-	--if not gameIsActive then return false end
-    
 	-- Only move to the screen boundaries
-	if event.x >= 50 and event.x <= display.contentWidth - 50 then
+	if event.x >= 75 and event.x <= display.contentWidth - 75 then
+		if event.y>=75 and event.y <= display.contentHeight -150 then
 		-- Update player x & y axis
-		diamond.x = event.x
-		diamond.y = event.y
-		snapShapes(diamond,dLine)
+			diamond.x = event.x
+			diamond.y = event.y
+			snapShapes(diamond,dLine)
+		end
 	end
 end
 

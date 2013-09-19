@@ -56,12 +56,9 @@ local enemySprite = { name="run", start=1, count=2, time = 300, loopCount = 0 }
 function tapRemove(event)
 	local name = event.target
     print ("removing obj")
---if (eventa.phase =="begin") then
---	timer.performWithDelay(1, function() self.removeSelf() end)
---end
 
    display.remove(name)
-   -- event.target = nil
+   event.target = nil
 end
 
 -- go to the main menu screen
