@@ -30,6 +30,11 @@ local dMatch = false
 --debug variable for testing
 local debugdisplay = true
 
+--default positions
+local yStart  = 678
+local sqStart = 600
+local cStart  = 373
+local dStart  = 144
 
 ----------------------------------------------------------------------------------
 -- 
@@ -145,42 +150,83 @@ end
 
 -- Move Circle function
 function moveCircle(event)
-	-- Only move to the screen boundaries
-	if event.x >= 75 and event.x <= display.contentWidth - 75 then
-		if event.y>=75 and event.y <= display.contentHeight -150 then
-		-- Update player x axis
-			circle.x = event.x
-			circle.y = event.y
-			snapShapes(circle, circLine)
-		end	
+
+	if event.phase =="began" then
+	--	display.getCurrentStage():setFocus( square )
+	--	square.isFocus = true
+	else  --if square.isFocus then
+		if event.phase == "moved" then
+		-- Only move to the screen boundaries
+		if event.x >= 75 and event.x <= display.contentWidth - 75 then
+			if event.y>=75 and event.y <= display.contentHeight -150 then
+			-- Update player x axis
+				circle.x = event.x
+				circle.y = event.y
+				snapShapes(circle, circLine)
+			end	
+		end
+		elseif event.phase == "ended" or event.phase == "cancelled" then
+			circle.x = cStart
+			circle.y = yStart
+		else
+			print "nada"
+		end
 	end
 end
 
 -- Move Square function
 function moveSquare(event)
+
+
+	if event.phase =="began" then
+	--	display.getCurrentStage():setFocus( square )
+	--	square.isFocus = true
+	else  --if square.isFocus then
+		if event.phase == "moved" then
 	-- Only move to the screen boundaries
-	if event.x >= 75 and event.x <= display.contentWidth - 75 then
-		if event.y>=75 and event.y <= display.contentHeight -150 then
-		-- Update player x & y axis
-			square.x = event.x
-			square.y = event.y
-			snapShapes(square,sqLine)
+		if event.x >= 75 and event.x <= display.contentWidth - 75 then
+			if event.y>=75 and event.y <= display.contentHeight -150 then
+			-- Update player x & y axis
+				square.x = event.x
+				square.y = event.y
+				snapShapes(square,sqLine)
+			end
+		end
+
+		elseif event.phase == "ended" or event.phase == "cancelled" then
+			square.x = sqStart
+			square.y = yStart
+		else
+			print "nada"
 		end
 	end
 end
 
 -- Move Diamond Function
 function moveDiamond(event)
+
+	if event.phase =="began" then--
+	--	display.getCurrentStage():setFocus( diamond )
+	--	diamond.isFocus = true
+	else --if diamond.isFocus then
+		if event.phase =="moved" then
 	-- Only move to the screen boundaries
-	if event.x >= 75 and event.x <= display.contentWidth - 75 then
-		if event.y>=75 and event.y <= display.contentHeight -150 then
-		-- Update player x & y axis
-			diamond.x = event.x
-			diamond.y = event.y
-			snapShapes(diamond,dLine)
+		if event.x >= 75 and event.x <= display.contentWidth - 75 then
+			if event.y>=75 and event.y <= display.contentHeight -150 then
+			-- Update player x & y axis
+				diamond.x = event.x
+				diamond.y = event.y
+				snapShapes(diamond,dLine)
+			end
+		end
+		elseif event.phase == "ended" or event.phase == "cancelled" then
+			diamond.x = dStart
+			diamond.y = yStart
+		else
+			print "nada"
 		end
 	end
-end
+ end
 
 -- Called when the scene's view does not exist:
 function scene:createScene( event )

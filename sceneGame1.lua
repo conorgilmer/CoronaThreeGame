@@ -49,8 +49,7 @@ function  moveLeft(event)
 	print 'Move Left'
 	tapChannel = audio.play( tapSound )
 
-	halfBoxHeight = 96/2
-	leftBound = 96
+	leftBound = 68
 --	if buttonPressed then
 		if junkbox.x >= leftBound then
 			junkbox.x = junkbox.x -25
@@ -61,8 +60,7 @@ end
 function  moveRight(event)
 	print 'Move rightbtn'
     tapChannel = audio.play( tapSound )
-	halfBoxHeight = 96/2
-	rightBound = display.contentWidth - 96
+	rightBound = display.contentWidth - 68
 
 	if junkbox.x <= rightBound then
 		junkbox.x = junkbox.x +25
@@ -73,7 +71,7 @@ function  moveUp(event)
 	print 'Move up'
   tapChannel = audio.play( tapSound )
 	halfBoxHeight = 96/2
-	if junkbox.y >= 120 then
+	if junkbox.y >= 96 then
 		junkbox.y = junkbox.y -25
 	end
 end
@@ -91,7 +89,7 @@ end
 local function moveJunk(event)
 	-- Doesn't respond if the game is ended
 	--if not gameIsActive then return false end
-    halfPlayerWidth = 96 
+    halfPlayerWidth = 68 -- just to have a margin
 	-- Only move to the screen boundaries
 	if event.x >= halfPlayerWidth and event.x <= display.contentWidth - halfPlayerWidth then
 		if event.y >= halfPlayerWidth and event.y <= display.contentHeight - halfPlayerWidth then
