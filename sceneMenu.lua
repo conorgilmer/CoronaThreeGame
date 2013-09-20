@@ -50,8 +50,8 @@ end
 
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
-	local group = self.view
-
+	local group = self.view	
+	audio.setVolume( 1, { channel=1 } )
 	-----------------------------------------------------------------------------
 		
 	--	CREATE display objects and add them to 'group' here.
@@ -86,6 +86,36 @@ function scene:createScene( event )
     g3img.x = display.contentWidth/2
 	g3img.y = (display.contentHeight *4)/5
 	group:insert(g3img)
+
+
+
+
+    -- Sound ON/OFF text in the bottom-right corner
+    soundText = display.newText(group, "Music: On ",380,290,"Arial",30)
+	--livesText:setReferencePoint(display.contentWidth/2); 
+	soundText:setTextColor(50)
+	soundText.x = 150; soundText.y = display.contentHeight - 50
+    --soundText = display.newText(screenGroup, "Sound: ON", 380, 290, 100, 20, "Arial", 15)
+    --soundText:setTextColor(50)
+
+    function soundOnOff()
+        if audioPause then
+           print("Music ON")
+            audio.setMaxVolume(1)
+            soundText.text = "Music: ON"
+            audioPause = false
+            audio.play(bgSound, {channel=1, loops=-1}) 
+        else
+            print("Music OFF")
+            audio.setMaxVolume(0) -- Handy option to turn off the music and every sound effects.
+            audioPause = true
+            audio.stop();
+            soundText.text = "Music: OFF"
+        end
+
+    end
+    -- This listener connect action to our button.
+    soundText:addEventListener("tap", soundOnOff)
 end
 
 -- Called immediately after scene has moved onscreen:
