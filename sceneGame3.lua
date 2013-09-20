@@ -166,8 +166,10 @@ function moveCircle(event)
 			end	
 		end
 		elseif event.phase == "ended" or event.phase == "cancelled" then
-			circle.x = cStart
-			circle.y = yStart
+			--circle.x = cStart
+			--circle.y = yStart
+			transition.to( circle, {time=200, delay=200, alpha=1.0, x=cStart, y=yStart, onComplete = moveCircle})
+
 		else
 			print "nada"
 		end
@@ -194,8 +196,10 @@ function moveSquare(event)
 		end
 
 		elseif event.phase == "ended" or event.phase == "cancelled" then
-			square.x = sqStart
-			square.y = yStart
+		--	square.x = sqStart
+		--	square.y = yStart
+		transition.to( square, {time=200, delay=200, alpha=1.0, x=sqStart, y=yStart, onComplete = moveCircle})
+
 		else
 			print "nada"
 		end
@@ -220,8 +224,10 @@ function moveDiamond(event)
 			end
 		end
 		elseif event.phase == "ended" or event.phase == "cancelled" then
-			diamond.x = dStart
-			diamond.y = yStart
+			--diamond.x = dStart
+			--diamond.y = yStart
+			transition.to(diamond, {time=200, delay=200, alpha=1.0, x=dStart, y=yStart, onComplete = moveCircle})
+
 		else
 			print "nada"
 		end
