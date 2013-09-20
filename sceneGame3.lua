@@ -111,15 +111,15 @@ function snapShapes(shape, outLine)
 		local houtlinex = outLine.x +40
 		local houtliney = outLine.y +40
 
-		displayDebug("moving"..shape.name)
-		displayDebug(outLine.name)
-		displayDebug("("..houtlinex..","..houtliney..")")
-		displayDebug("("..shape.x..","..shape.y..")")
+		--displayDebug("moving"..shape.name)
+		--displayDebug(outLine.name)
+		--displayDebug("("..houtlinex..","..houtliney..")")
+		--displayDebug("("..shape.x..","..shape.y..")")
 
 		if (shape.x <= houtlinex and shape.x > loutlinex) and (shape.y <= houtliney and shape.y > loutliney)  then
 			shape.x = outLine.x
 			shape.y = outLine.y
-		 	displayDebug("snapping "..shape.name.." to "..outLine.name)
+		 	--displayDebug("snapping "..shape.name.." to "..outLine.name)
 			--physics.addBody(shape, "static", {density=0.004, friction=0.3, bounce=0, isSensor =true, gravity=0} )
 			--shape.gravity=0
 			snapChannel = audio.play(snapSound)
