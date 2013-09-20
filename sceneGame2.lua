@@ -2,10 +2,14 @@
 --
 -- sceneGame2.lua
 -- Game 2 has an enemy walking at the bottom and when you click on one of the 
--- platforms and object falls if it hits the enemy it kills him
+-- platforms and object(sun) falls if it hits the enemy it kills him
+-- you have 3 lives or suns to do this
+-- prints if you win or lose in the bottom panel
+-- button to return to main menu
 --
 -- by Conor Gilmer (D12127567) conor.gilmer@gmail.com
 --
+-- 
 ----------------------------------------------------------------------------------
 
 --imports
@@ -22,6 +26,12 @@ local background
 -- set up sounds
 local splatSound, tuddSound
 local splatChannel, tuddChannel = 2, 4
+
+-- game progress variables
+local livesText
+local lives = 3
+local killedhim = false
+local resultText
 
 --events
 local gameLoop, onCollision
@@ -51,6 +61,7 @@ local enemySprite = { name="run", start=1, count=2, time = 300, loopCount = 0 }
 -- BEGINNING OF YOUR IMPLEMENTATION
 ---------------------------------------------------------------------------------
 
+-- remove a platform when tapped
 function tapRemove(event)
 	local name = event.target
     --print ("removing obj")
@@ -81,7 +92,7 @@ function scene:createScene( event )
 	--	Example use-case: Restore 'group' from previously saved state.
 	
 	-----------------------------------------------------------------------------
-	
+	-- sounds
 	splatSound = audio.loadSound("comedy_trumpet.mp3") 
 	tuddSound = audio.loadSound("Collect.mp3")
 
@@ -108,7 +119,7 @@ function scene:createScene( event )
 	sun1 = display.newImage("sun.png")
 	sun1.x = platform1.x
 	sun1.y = platform1.y  -100
-	sun1.name="sun1"
+	sun1.name="sun1" -- all suns will have the same name to detect if a sun hit the enemy
 	physics.addBody(sun1, "dynamic", {bounce=0})
 	group:insert(sun1)
 
@@ -127,14 +138,12 @@ function scene:createScene( event )
 	physics.addBody(sun2, "dynamic", {bounce=0})
 	group:insert(sun2)
 
-
     -- Add Platform3
     platform3 = display.newImage("platform.png")
     platform3.y = display.contentHeight - 650
     platform3.x = display.contentWidth - 200
     physics.addBody(platform3, "static", {bounce= 0})
     group:insert(platform3)
-
 
      -- add sun 3
 	sun3 = display.newImage("sun.png")
@@ -144,9 +153,7 @@ function scene:createScene( event )
 	physics.addBody(sun3, "dynamic", {bounce=0})
 	group:insert(sun3)
 
-
-    --print "add walker"
-    -- add walker from left to right
+    -- add walker/enemy from left to right
     enemy = display.newSprite(enemySheet, enemySprite)
 	enemy:setReferencePoint(display.BottomCenterReferencePoint)
 	enemy.x = 300; enemy.y = display.contentHeight -120 
@@ -155,7 +162,6 @@ function scene:createScene( event )
 	physics.addBody( enemy, "static", { isSensor = true } )
 	enemy:setSequence("stand"); 
 	enemy:play()
-	--enemyGroup:insert(enemy)
     group:insert(enemy)
     gameIsActive = true
 
@@ -165,6 +171,15 @@ function scene:createScene( event )
 	mmimg.y = (display.contentHeight) - 50
 	group:insert(mmimg)
 
+	-- added lives counter text and output field for game outcome
+    livesText = display.newText(group, "Lives: "..lives,0,0,"Arial",30)
+	--livesText:setReferencePoint(display.contentWidth/2); 
+	livesText:setTextColor(50)
+	livesText.x = 150; livesText.y = display.contentHeight - 50
+	--livesText = display.newText({text = "Lives: "..lives, x=100, y=display.contentHeight-50, align = "center"})
+	--group:insert(livesText)
+
+    -- add event listeners
 	mmimg:addEventListener("touch", mainmenu)
 	event.phase ="begin"
 	platform1:addEventListener("touch", function()platform1:removeSelf()end)
@@ -181,18 +196,18 @@ function scene:enterScene( event )
 -- do i need this
 storyboard.removeAll()
 
+-- create a splat when the enemy is hit by the ball/sun/rock
 function createSplat(walker)
 	
     splat = display.newImage("splat.png")
 	splat.x = walker.x
 	splat.y = walker.y
-	--splash.rotation = math.random(-90,90)
-	--splash.alpha = splashInitAlpha
 	group:insert(splat)
 	splatChannel = audio.play(splatSound)
-	
-	--transition.to(splash, {time = splashFadeTime, alpha = 0,  y = splash.y + splashSlideDistance, delay = splashFadeDelayTime, onComplete = function(event) splash:removeSelf() end})		
-	
+	livesText.text = "Well Done You Win!"
+	gameIsActive = false -- stop game when got enemy
+
+	--transition??? would be more elegant
 end
 
 	--Collision functon. Controls hitting the blocks and coins etc. Also resets the jumping, climbing a ladder and descending one - cg
@@ -202,43 +217,51 @@ end
             local name1 = event.object1.name
             local name2 = event.object2.name
             --print "in collision and active" 
-            --print (name1) 
-            --print (name2)
 
             if name1== "floor" or name2=="floor" then
             	if name1=="sun1" or name2=="sun1" then
             		print "hit floor"
+            		lives = lives -1
             		if name1=="sun1" then
             			print ("removing obj")
     					display.remove(event.object1)
     					event.object1 = nil
     					tuddChannel = audio.play(tuddSound)
-
-
     				else 
     					print ("removing name 2 obj")
     					display.remove(event.object2)
     					event.object2= nil
     					tuddChannel = audio.play(tuddSound)
             		end
+					if lives > 0 then
+					   livesText.text = "Lives: "..lives
+				    else
+				    	if killedhim then
+				    		livesText.text = "You Win"
+				    	else
+					    livesText.text = "Hard Luck you Lose!"
+				        end
+				    end
             	end
             end
        
             if name1== "enemy" or name2=="enemy" then
             	if name1=="sun1" or name2=="sun1" then
-            		print "Gotcha!!!"
+            		--print "Gotcha!!!"
 
             		if name1=="enemy" then
             			print ("removing obj")
             			createSplat(event.object1)
     					display.remove(event.object1)
-    					event.object1 = nil
+    				--	event.object1 = nil
+    					killedhim = true
     					
     				else 
     					createSplat(event.object2)
     					print ("removing name 2 obj")
     					display.remove(event.object2)
-    					event.object2= nil
+    				--	event.object2= nil
+    					killedhim=true
             		end
             	end
             end
@@ -255,7 +278,6 @@ end
 			local i
 			for i = 1,1,-1 do
 			--	print "in game loop i"
-			--	local enemy = enemyGroup[i]
 				if enemy ~= nil and enemy.y ~= nil then
 					enemy:translate( enemy.speed, 0)
 					--Check to see if the enemy needs to change its direciton.
@@ -319,8 +341,6 @@ function scene:destroyScene( event )
 	audio.dispose(tuddSound)
 	splatSound=nil
 	tuddSound=nil
-
-
 end
 
 
